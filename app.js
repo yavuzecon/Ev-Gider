@@ -1,4 +1,4 @@
-// === Değişkenler ve Elemanlar ===
+// Değişkenler ve Elemanlar
 let people = [];
 let expenses = [];
 let payments = [];
@@ -241,9 +241,7 @@ deleteModal.addEventListener("click", (e) => {
   if (e.target === deleteModal) deleteModal.style.display = "none";
 });
 
-// === Borç & Ödeme (Ödeme ekle, listele, borç hesapla) ===
-
-// Ödeme Kaydı
+// === Borç & Ödeme ===
 paymentForm.addEventListener("submit", function (e) {
   e.preventDefault();
   const from = document.getElementById("paidBy").value;
@@ -261,7 +259,6 @@ paymentForm.addEventListener("submit", function (e) {
   calculateDebts();
 });
 
-// Ödeme Listesini Güncelle
 function updatePaymentsUI() {
   paymentList.innerHTML = "";
   if (payments.length === 0) {
@@ -275,7 +272,6 @@ function updatePaymentsUI() {
   });
 }
 
-// Borç Hesaplama ve Özet
 function calculateDebts() {
   const debts = {};
   people.forEach(p1 => {
