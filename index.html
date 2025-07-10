@@ -310,4 +310,316 @@
     // Buraya 4 sekmeli güncel JS'i ekleyeceksin!
   </script>
 </body>
+</html><!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HomEco</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4faff;
+      padding: 20px;
+      margin: 0;
+    }
+    h1, h2, h3 {
+      color: #048628;
+      margin-bottom: 10px;
+    }
+    form {
+      background: white;
+      padding: 15px;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+      margin-bottom: 25px;
+      border-left: 5px solid #38B6FF;
+    }
+    input, button, select {
+      width: 100%;
+      padding: 12px;
+      margin: 8px 0;
+      font-size: 16px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      transition: border 0.3s;
+    }
+    input[type="number"]::-webkit-inner-spin-button {
+      opacity: 0.5;
+    }
+    input:focus, select:focus {
+      border: 1px solid #38B6FF;
+      outline: none;
+    }
+    button {
+      background-color: #048628;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #036b1d;
+    }
+    #clearBtn {
+      background-color: #d63031;
+    }
+    #clearBtn:hover {
+      background-color: #c0392b;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #personList li {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      border-left: 5px solid #8BC349;
+      background: white;
+      margin-bottom: 10px;
+      padding: 12px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+    .person-name {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      font-size: 1em;
+      color: #222;
+    }
+    li {
+      background: white;
+      margin-bottom: 10px;
+      padding: 12px;
+      border-left: 5px solid #38B6FF;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+    #debtSummary {
+      margin-top: 20px;
+      background: #eaf6ff;
+      padding: 15px;
+      border-left: 5px solid #048628;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+    }
+    #paymentList li {
+      border-left: 5px solid #8BC349;
+    }
+    #paymentForm button {
+      background-color: #8BC349;
+    }
+    #paymentForm button:hover {
+      background-color: #7ab133;
+    }
+    #personWarning {
+      color: red;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    #expenseTitle {
+      display: none;
+      margin-top: 30px;
+      margin-bottom: 10px;
+      color: #048628;
+    }
+    #expenseFormTitle {
+      margin-top: 30px;
+      margin-bottom: 10px;
+      color: #048628;
+    }
+    /* Kişi Sil Modalı */
+    .modal-overlay {
+      position: fixed;
+      left: 0; top: 0; width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+    }
+    .modal-content {
+      background: #fff;
+      padding: 28px 22px;
+      border-radius: 10px;
+      min-width: 260px;
+      box-shadow: 0 4px 24px rgba(44,44,44,0.15);
+      text-align: center;
+    }
+    .modal-content h3 { margin-top:0; margin-bottom:12px; color:#d63031; }
+    .modal-content label { display:block; margin-bottom:8px; }
+    .modal-content select { width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; }
+    .modal-content button { min-width:80px; padding:10px 16px; border:none; border-radius:6px; cursor:pointer; font-size:1em; }
+    .modal-content button:not(:last-child) { margin-right:8px; }
+    /* Navbar tab */
+    #navbar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      margin-top: 8px;
+    }
+    .tab-btn {
+      background: #f4faff;
+      border: 2px solid #38B6FF;
+      color: #048628;
+      border-radius: 8px 8px 0 0;
+      padding: 8px 24px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s;
+    }
+    .tab-btn.active, .tab-btn:hover {
+      background: #38B6FF;
+      color: #fff;
+    }
+    /* Finansal Sağlık Tablo */
+    #categorySummary table {
+      margin: auto;
+      border-collapse: collapse;
+      min-width: 320px;
+    }
+    #categorySummary th, #categorySummary td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    #categorySummary th {
+      background: #eaf6ff;
+      color: #048628;
+      font-weight: bold;
+      text-align: left;
+    }
+    #categorySummary td {
+      text-align: right;
+    }
+    #categorySummary td:first-child {
+      text-align: left;
+    }
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.5em;
+      }
+      input, button, select {
+        font-size: 15px;
+        padding: 10px;
+      }
+      form {
+        padding: 12px;
+      }
+      #personList li {
+        padding: 10px;
+        font-size: 0.98em;
+      }
+      #categorySummary table {
+        min-width: 200px;
+        font-size: 0.95em;
+      }
+    }
+  </style>
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+<body>
+  <header style="text-align: center; margin-bottom: 20px;">
+    <h1>🏠 HomEco</h1>
+  </header>
+  <!-- NAVBAR -->
+  <div id="navbar">
+    <button class="tab-btn active" onclick="showPage('personPage')">Kişilerim</button>
+    <button class="tab-btn" onclick="showPage('spendPage')">Harcama & Gider</button>
+    <button class="tab-btn" onclick="showPage('debtPage')">Borç & Ödeme</button>
+    <button class="tab-btn" onclick="showPage('healthPage')">Finansal Sağlık</button>
+  </div>
+  <!-- KİŞİLERİM SAYFASI -->
+  <div id="personPage" style="display:block;">
+    <h2>👥 Kişilerim</h2>
+    <form id="personForm">
+      <input type="text" id="personName" placeholder="İsim girin (örnek: Semih)" required>
+      <button type="submit">Kişi Ekle</button>
+    </form>
+    <ul id="personList"></ul>
+    <button id="showDeleteModalBtn" style="background:#d63031; color:#fff; margin-bottom:16px;">Kişi Sil</button>
+    <p id="personWarning" style="display: none;">Lütfen en az 2 kişi ekleyin.</p>
+    <!-- Kişi Sil Modalı -->
+    <div id="deleteModal" class="modal-overlay" style="display:none;">
+      <div class="modal-content">
+        <h3>Kullanıcı Sil</h3>
+        <label for="deletePersonSelect">Silmek istediğiniz kullanıcıyı seçin:</label>
+        <select id="deletePersonSelect"></select>
+        <div style="margin-top:18px; display:flex; gap:10px;">
+          <button id="confirmDeleteBtn" style="background:#d63031; color:#fff;">Sil</button>
+          <button id="cancelDeleteBtn" style="background:#ccc;">Vazgeç</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- HARCAMA & GİDER SAYFASI -->
+  <div id="spendPage" style="display:none;">
+    <div id="summaryInfo" style="background:#eaf6ff; border-left:5px solid #8BC349; border-radius:8px; padding:10px 16px; margin-bottom:20px;">
+      <b>Toplam Harcama:</b> <span id="totalSpent">0</span> TL |
+      <b>Kişi Başı Ortalama:</b> <span id="avgSpent">0</span> TL
+    </div>
+    <h2 id="expenseFormTitle">📝 Harcama Ekle</h2>
+    <form id="expenseForm">
+      <input type="text" id="desc" placeholder="Açıklama (örnek: deterjan)" required>
+      <select id="category" required>
+        <option value="" disabled selected>Kategori seçin</option>
+        <option value="Yiyecek">🍞 Yiyecek</option>
+        <option value="İçecek">🥤 İçecek</option>
+        <option value="Kira">🏠 Kira</option>
+        <option value="Temizlik">🧼 Temizlik</option>
+        <option value="Ulaşım">🚗 Ulaşım</option>
+        <option value="Eğlence">🎉 Eğlence</option>
+        <option value="Fatura">💡 Fatura</option>
+        <option value="Diğer">📦 Diğer</option>
+      </select>
+      <input type="number" id="amount" step="any" placeholder="Tutar (TL)" required>
+      <select id="payer" required>
+        <option value="" disabled selected>Kim ödedi?</option>
+      </select>
+      <input type="date" id="date">
+      <button type="submit">Ekle</button>
+    </form>
+    <h2 id="expenseTitle">📋 Gider Listesi</h2>
+    <ul id="expenseList"></ul>
+    <button id="clearBtn">🗑️ Tümünü Temizle</button>
+  </div>
+  
+  
+<!-- BORÇ & ÖDEME SAYFASI -->
+  <div id="debtPage" style="display:none;">
+    <h2>💰 Borç & Ödeme</h2>
+    <form id="paymentForm">
+      <select id="paidBy" required>
+        <option value="" disabled selected>Kim ödedi?</option>
+      </select>
+      <select id="paidTo" required>
+        <option value="" disabled selected>Kime ödedi?</option>
+      </select>
+      <input type="number" id="paymentAmount" step="any" placeholder="Tutar (TL)" required>
+      <input type="date" id="paymentDate">
+      <button type="submit">Ödemeyi Kaydet</button>
+    </form>
+    <h2>📬 Yapılan Ödemeler</h2>
+    <ul id="paymentList"></ul>
+    <div id="debtSummary"></div>
+  </div>
+
+  <!-- FİNANSAL SAĞLIK SAYFASI -->
+  <div id="healthPage" style="display:none;">
+    <h2>📊 Kategori Bazında Harcama Analizi</h2>
+    <div id="categorySummary"></div>
+    <div id="categoryChart" style="max-width:500px; margin:auto;"></div>
+    <h3 style="margin-top:32px;">Aylık Toplam Harcama Trendi</h3>
+    <div id="trendChart" style="max-width: 600px; margin:32px auto;"></div>
+  </div>
+
+  <!-- === TÜM JS BURAYA GELECEK === -->
+  <script>
+    // Buraya 4 sekmeli güncel JS'i ekleyeceksin!
+  </script>
+</body>
 </html>
